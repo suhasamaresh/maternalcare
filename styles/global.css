@@ -1,0 +1,11 @@
+/* Ensure you add these styles in your global CSS file or the component CSS module */
+.last-card .sticky {
+    position: relative;
+    top: auto;
+    z-index: 1;
+  }
+  
+  .last-card-content {
+    top: auto;
+  }
+  
