@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`bg-[#faeee7] w-full z-10 top-0 shadow-md transition-transform duration-300 ease-in-out transform ${
+      className={`bg-[#faeee7] w-full z-0 top-0 shadow-md transition-transform duration-300 ease-in-out transform  ${
         visible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >

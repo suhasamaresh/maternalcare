@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "flubber": "^0.4.2",
     "framer-motion": "^11.2.10",
     "lenis": "^1.1.2",
     "next": "14.2.3",

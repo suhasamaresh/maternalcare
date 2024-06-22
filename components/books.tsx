@@ -69,6 +69,7 @@ const StickyCard = ({
   const scale = useTransform(progress, range, [1, targetScale]);
 
   return (
+  
     <div
       ref={container}
       className="flex flex-col h-screen items-center justify-center mt-8 sticky top-0"
@@ -115,6 +116,8 @@ const StickyCardList = () => {
   });
 
   return (
+    <div>
+      <p className='font-bold text-black text-center text-4xl mt-912'>These are some of the books we recommend to read during pregnancy</p>
     <div
       ref={container}
       className="flex flex-col items-center justify-center space-y-8"
@@ -136,7 +139,7 @@ const StickyCardList = () => {
           />
         );
       })}
-    </div>
+    </div></div>
   );
 };
 

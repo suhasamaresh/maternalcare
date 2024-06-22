@@ -1,7 +1,9 @@
 "use client"
 import Book from "@/components/book";
 import Books from "@/components/books";
+import Card from "@/components/card";
 import { motion } from "framer-motion";
+import PointerCard from "@/components/exercises";
 
 export default function Home() {
   return (
@@ -35,6 +37,8 @@ export default function Home() {
       </div>
     <Book />  
     <Books/>
+    <Card/>
+    <PointerCard/>
     </div>
   );
 }
