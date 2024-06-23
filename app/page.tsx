@@ -1,13 +1,12 @@
-"use client"
+"use client";
 import Book from "@/components/book";
 import Books from "@/components/books";
-import Card from "@/components/card";
 import { motion } from "framer-motion";
-import PointerCard from "@/components/exercises";
+import FollowerPointerCard from "@/components/exercises";
 
 export default function Home() {
   return (
-    <div  className="bg-[#faeee7]">
+    <div className="bg-[#faeee7]">
       <div className="bg-[#faeee7] flex flex-col items-center justify-center pt-10 pb-10">
         <main className="flex flex-col md:flex-row items-center justify-between w-full max-w-7xl">
           <div className="md:w-1/2 flex flex-col items-center md:items-start mb-5 md:mb-0 text-center md:text-left">
@@ -22,7 +21,14 @@ export default function Home() {
               healthcare professionals is here to support you every step of the
               way.
             </p>
-            <motion.button className="bg-[#ff8ba7] text-[#33272a] py-2 px-6 rounded-lg text-lg font-semibold hover:bg-[#ff6b85] transition-colors" initial={{scale:0}} animate={{scale:1}} whileHover={{scale:1.1}} whileTap={{scale:0.9}} transition={{type:"spring",stiffness:400,damping:17}}>
+            <motion.button
+              className="bg-[#ff8ba7] text-[#33272a] py-2 px-6 rounded-lg text-lg font-semibold hover:bg-[#ff6b85] transition-colors"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            >
               Learn More
             </motion.button>
           </div>
@@ -35,10 +41,9 @@ export default function Home() {
           </div>
         </main>
       </div>
-    <Book />  
-    <Books/>
-    <Card/>
-    <PointerCard/>
+      <Book />
+      <Books />
+      <FollowerPointerCard />
     </div>
   );
 }

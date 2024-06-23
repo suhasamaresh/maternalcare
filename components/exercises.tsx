@@ -1,27 +1,73 @@
 "use client";
-import { AnimatePresence, motion, useMotionValue } from "framer-motion";
-import React, { useEffect } from "react";
-import clsx from "clsx";
+import React, { useLayoutEffect, useState } from "react";
+import { motion, AnimatePresence, useMotionValue } from "framer-motion";
+import Link from "next/link";
 
-const PointerCard = ({ title }: { title: string }) => {
+// Information about exercises for pregnant women
+const exercises = [
+  {
+    title: "Prenatal Yoga",
+    description: "A gentle form of yoga focusing on poses for pregnant women.",
+    image: "preg.jpg",
+  },
+  {
+    title: "Walking",
+    description: "A safe and effective way to stay fit during pregnancy.",
+    image: "walk.jpg",
+  },
+  {
+    title: "Stretching",
+    description: "Helps to relieve stress and improves circulation.",
+    image: "stretch.jpg",
+  },
+  {
+    title: "Pelvic Floor Exercises",
+    description: "Strengthens the muscles that support the bladder, bowel, and uterus.",
+    image: "sharan.jpg",
+  },
+];
+
+const FollowerPointerCard = () => {
+  return (
+    <div className="flex justify-center flex-wrap gap-8">
+      {exercises.map((item, index) => (
+        <Card key={index} item={item} />
+      ))}
+    </div>
+  );
+};
+
+const Card = ({ item }: { item: { title: string; description: string; image: string } }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const ref = React.useRef<HTMLDivElement>(null);
-  const [rect, setRect] = React.useState<DOMRect | null>(null);
-  const [isInside, setIsInside] = React.useState(false);
+  const [rect, setRect] = useState<DOMRect | null>(null);
+  const [isInside, setIsInside] = useState<boolean>(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      if (ref.current) {
+        setRect(ref.current.getBoundingClientRect());
+      }
+    });
+
     if (ref.current) {
-      setRect(ref.current.getBoundingClientRect());
+      resizeObserver.observe(ref.current);
     }
-  }, []);
 
-  const handleMouseMove = (event: { clientX: number; clientY: number }) => {
+    return () => {
+      if (ref.current) {
+        resizeObserver.unobserve(ref.current);
+      }
+    };
+  }, [ref]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (rect) {
       const scrollX = window.scrollX;
       const scrollY = window.scrollY;
-      x.set(event.clientX - rect.left + scrollX);
-      y.set(event.clientY - rect.top + scrollY);
+      x.set(e.clientX - rect.left + scrollX);
+      y.set(e.clientY - rect.top + scrollY);
     }
   };
 
@@ -34,21 +80,23 @@ const PointerCard = ({ title }: { title: string }) => {
   };
 
   return (
-    <div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={handleMouseEnter}
-      style={{ cursor: "none" }}
-      className={clsx(
-        "relative w-72 h-72 bg-[#ff8ba7] rounded-lg flex items-center justify-center ml-[100px]"
-      )}
-    >
-      <AnimatePresence>
-        {isInside && <FollowPointer x={x.get()} y={y.get()} title={title} />}
-      </AnimatePresence>
-      <div>{title}</div>
-    </div>
+    <Link href={"/exercises"}>
+      <div
+        onMouseLeave={handleMouseLeave}
+        onMouseEnter={handleMouseEnter}
+        onMouseMove={handleMouseMove}
+        className="relative p-4 bg-white shadow-md rounded-md w-full max-w-[300px] h-[400px]"
+        ref={ref}
+        style={{ cursor: "none" }}
+      >
+        <AnimatePresence>
+          {isInside && <FollowPointer x={x} y={y} title={item.title} />}
+        </AnimatePresence>
+        <motion.img src={item.image} initial={{ scale: 1 }} whileHover={{ scale: 0.95 }} transition={{ type: "tween", stiffness: 400, damping: 17, duration: 0.2 }} alt={item.title} className="w-full h-64 rounded-md object-cover" />
+        <h2 className="mt-2 text-xl font-bold">{item.title}</h2>
+        <p className="text-gray-500 mt-1 text-base">{item.description}</p>
+      </div>
+    </Link>
   );
 };
 
@@ -57,31 +105,21 @@ const FollowPointer = ({
   y,
   title,
 }: {
-  x: number;
-  y: number;
+  x: any;
+  y: any;
   title: string;
 }) => {
-  const colors = [
-    "var(--red-200)",
-    "var(--blue-200)",
-    "var(--green-200)",
-    "var(--yellow-200)",
-    "var(--orange-200)",
-    "var(--indigo-200)",
-  ];
-  const randomColor = colors[Math.floor(Math.random() * colors.length)];
-
   return (
     <motion.div
-      className="absolute z-50 rounded-full"
+      className="absolute z-50 h-4 w-4 rounded-full"
       style={{
         top: y,
         left: x,
         pointerEvents: "none",
       }}
       initial={{
-        scale: 0,
-        opacity: 0,
+        scale: 1,
+        opacity: 1,
       }}
       animate={{
         scale: 1,
@@ -97,7 +135,7 @@ const FollowPointer = ({
         fill="currentColor"
         strokeWidth="1"
         viewBox="0 0 16 16"
-        className="h-6 w-6 text-sky-500 transform -rotate-[70deg] -translate-x-[12px] -translate-y-[10px] stroke-sky-600"
+        className="h-6 w-6 text-[#DE3163] transform -rotate-[70deg] -translate-x-[12px] -translate-y-[10px] stroke-[#DE3163]"
         height="1em"
         width="1em"
         xmlns="http://www.w3.org/2000/svg"
@@ -105,8 +143,10 @@ const FollowPointer = ({
         <path d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103z"></path>
       </svg>
       <motion.div
+        className="px-2 py-1 bg-[#ff6b85] text-white text-xs rounded-full whitespace-nowrap overflow-hidden"
         style={{
-          backgroundColor: "red",
+          width: "max-content",
+          maxWidth: "200px",
         }}
         initial={{
           scale: 0.5,
@@ -120,14 +160,11 @@ const FollowPointer = ({
           scale: 0.5,
           opacity: 0,
         }}
-        className={clsx(
-          "px-2 py-2 text-white whitespace-nowrap min-w-max text-xs rounded-full"
-        )}
       >
-        {title || "Hello"}
+        {title}
       </motion.div>
     </motion.div>
   );
 };
 
-export default PointerCard;
+export default FollowerPointerCard;

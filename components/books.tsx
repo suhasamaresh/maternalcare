@@ -104,7 +104,6 @@ const StickyCardList = () => {
     const lenis = new Lenis();
 
     lenis.on("scroll", (e: any) => {
-      console.log(e);
     });
 
     function raf(time: number) {
