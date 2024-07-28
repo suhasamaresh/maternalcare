@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
-import { motion, AnimatePresence, useMotionValue } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, MotionValue } from "framer-motion";
 import Link from "next/link";
 
 // Information about exercises for pregnant women
@@ -115,7 +115,7 @@ const Card = ({ item }: { item: { title: string, description: string, image: str
   );
 };
 
-const FollowPointer = ({ x, y, title }) => {
+const FollowPointer = ({ x, y, title }: { x: MotionValue<number>, y: MotionValue<number>, title: string }) => {
   return (
     <motion.div
       className="absolute z-50 h-4 w-4 rounded-full"

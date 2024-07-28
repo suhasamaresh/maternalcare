@@ -4,6 +4,7 @@ import Books from "@/components/books";
 import { motion } from "framer-motion";
 import FollowerPointerCard from "@/components/exercises";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { AnimatedBeamDemo } from "@/components/AnibeamCard";
 
 export default function Home() {
   return (
@@ -33,12 +34,8 @@ export default function Home() {
               Learn More
             </motion.button>
           </div>
-          <div className="md:w-1/2 flex flex-col items-center xl:pl-[240px]"> {/* Added margin-left here */}
-            <img
-              src="https://via.placeholder.com/300x200.png?text=Maternal+Care+Animation"
-              alt="Maternal Care Animation"
-              className="w-72 h-auto mb-5"
-            />
+          <div className="md:w-3/4 flex flex-col items-center xl:pl-[240px]">
+            <AnimatedBeamDemo />
             <div className="flex flex-col items-center text-center py-5">
               <WalletMultiButton 
                 style={{ 
