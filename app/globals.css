@@ -31,3 +31,41 @@ body {
     text-wrap: balance;
   }
 }
+
+@keyframes borderBeamMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 200%;
+  }
+}
+
+.gradient-button {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.gradient-button::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(90deg, rgba(114, 227, 252, 0) 0%, rgba(114, 227, 252, 1) 50%, rgba(114, 227, 252, 0) 100%);
+  background-size: 200% 200%;
+  z-index: -1;
+  animation: borderBeamMove 2.5s linear infinite;
+  border-radius: 10px;
+}

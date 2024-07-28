@@ -1,4 +1,3 @@
-"use client";
 import React, { useLayoutEffect, useState } from "react";
 import { motion, AnimatePresence, useMotionValue } from "framer-motion";
 import Link from "next/link";
@@ -29,20 +28,30 @@ const exercises = [
 
 const FollowerPointerCard = () => {
   return (
-    <div className="flex justify-center flex-wrap gap-8">
-      {exercises.map((item, index) => (
-        <Card key={index} item={item} />
-      ))}
+    <div>
+      <div className="text-center text-4xl pt-10 pb-10">
+        <p>
+          Some of our recommended exercises during pregnancy
+        </p>
+      </div>
+      <div className="flex justify-center flex-wrap gap-8">
+        {exercises.map((item, index) => (
+          <Card key={index} item={item} />
+        ))}
+      </div>
+      <div className="flex justify-center mt-8">
+        <GradientButton />
+      </div>
     </div>
   );
 };
 
-const Card = ({ item }: { item: { title: string; description: string; image: string } }) => {
+const Card = ({ item }: { item: { title: string, description: string, image: string } }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const ref = React.useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState<DOMRect | null>(null);
-  const [isInside, setIsInside] = useState<boolean>(false);
+  const [isInside, setIsInside] = useState(false);
 
   useLayoutEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
@@ -62,7 +71,7 @@ const Card = ({ item }: { item: { title: string; description: string; image: str
     };
   }, [ref]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: { clientX: number; clientY: number; }) => {
     if (rect) {
       const scrollX = window.scrollX;
       const scrollY = window.scrollY;
@@ -85,14 +94,20 @@ const Card = ({ item }: { item: { title: string; description: string; image: str
         onMouseLeave={handleMouseLeave}
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
-        className="relative p-4 bg-white shadow-md rounded-md w-full max-w-[300px] h-[400px]"
+        className="relative p-4 bg-purple-200 border border-[#B941FF] shadow-md rounded-2xl w-full max-w-[300px] h-[400px] cursor-none"
         ref={ref}
-        style={{ cursor: "none" }}
       >
         <AnimatePresence>
           {isInside && <FollowPointer x={x} y={y} title={item.title} />}
         </AnimatePresence>
-        <motion.img src={item.image} initial={{ scale: 1 }} whileHover={{ scale: 0.95 }} transition={{ type: "tween", stiffness: 400, damping: 17, duration: 0.2 }} alt={item.title} className="w-full h-64 rounded-md object-cover" />
+        <motion.img
+          src={item.image}
+          initial={{ scale: 1 }}
+          whileHover={{ scale: 0.95 }}
+          transition={{ type: "tween", stiffness: 400, damping: 17, duration: 0.2 }}
+          alt={item.title}
+          className="w-full h-64 rounded-md object-cover"
+        />
         <h2 className="mt-2 text-xl font-bold">{item.title}</h2>
         <p className="text-gray-500 mt-1 text-base">{item.description}</p>
       </div>
@@ -100,15 +115,7 @@ const Card = ({ item }: { item: { title: string; description: string; image: str
   );
 };
 
-const FollowPointer = ({
-  x,
-  y,
-  title,
-}: {
-  x: any;
-  y: any;
-  title: string;
-}) => {
+const FollowPointer = ({ x, y, title }) => {
   return (
     <motion.div
       className="absolute z-50 h-4 w-4 rounded-full"
@@ -164,6 +171,14 @@ const FollowPointer = ({
         {title}
       </motion.div>
     </motion.div>
+  );
+};
+
+const GradientButton = () => {
+  return (
+    <button className="gradient-button p-4  text-white text-lg font-semibold">
+      More..
+    </button>
   );
 };
 

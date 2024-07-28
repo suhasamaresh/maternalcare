@@ -3,11 +3,12 @@ import Book from "@/components/book";
 import Books from "@/components/books";
 import { motion } from "framer-motion";
 import FollowerPointerCard from "@/components/exercises";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 export default function Home() {
   return (
     <div className="bg-[#faeee7]">
-      <div className="bg-[#faeee7] flex flex-col items-center justify-center pt-10 pb-10">
+      <div className="bg-[#faeee7] flex flex-col items-center justify-between pt-10 pb-10">
         <main className="flex flex-col md:flex-row items-center justify-between w-full max-w-7xl">
           <div className="md:w-1/2 flex flex-col items-center md:items-start mb-5 md:mb-0 text-center md:text-left">
             <header className="text-center mb-10">
@@ -32,12 +33,22 @@ export default function Home() {
               Learn More
             </motion.button>
           </div>
-          <div className="md:w-1/2 flex justify-center md:justify-end">
+          <div className="md:w-1/2 flex flex-col items-center xl:pl-[240px]"> {/* Added margin-left here */}
             <img
               src="https://via.placeholder.com/300x200.png?text=Maternal+Care+Animation"
               alt="Maternal Care Animation"
-              className="w-72 h-auto"
+              className="w-72 h-auto mb-5"
             />
+            <div className="flex flex-col items-center text-center py-5">
+              <WalletMultiButton 
+                style={{ 
+                  margin: '0 auto', 
+                  width: 'auto', 
+                  maxWidth: '200px',
+                  padding: '10px 20px' 
+                }} 
+              />
+            </div>
           </div>
         </main>
       </div>

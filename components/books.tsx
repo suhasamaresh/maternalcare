@@ -116,11 +116,12 @@ const StickyCardList = () => {
 
   return (
     <div>
-      <p className='font-bold text-black text-center text-4xl mt-912'>These are some of the books we recommend to read during pregnancy</p>
+   
     <div
       ref={container}
       className="flex flex-col items-center justify-center space-y-8"
     >
+         <p className='font-bold text-black text-center text-4xl pt-10'>These are some of the books we recommend to read during pregnancy</p>
       {cardData.map((card, index) => {
         const targetScale = 1 - (cardData.length - index) * 0.05;
         const range = [index / cardData.length, 1];

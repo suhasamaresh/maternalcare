@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/footer";
+import AppWalletProvider from "@/components/AppWalletProvider";
+ 
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,9 +18,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+  
   return (
     <html lang="en">
-      <body className={inter.className}><Navbar/>{children}<Footer/></body>
+      <body className={inter.className}>
+        <Navbar />
+        <AppWalletProvider>{children}</AppWalletProvider>
+        <Footer />
+      </body>
     </html>
   );
 }
