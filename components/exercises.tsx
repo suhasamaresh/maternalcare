@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { motion, AnimatePresence, useMotionValue, MotionValue } from "framer-motion";
 import Link from "next/link";
 
@@ -53,7 +53,7 @@ const Card = ({ item }: { item: { title: string, description: string, image: str
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [isInside, setIsInside] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
       if (ref.current) {
         setRect(ref.current.getBoundingClientRect());

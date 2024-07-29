@@ -14,15 +14,73 @@ export default function DoctorForm() {
     contact: "",
   });
 
+  const [errors, setErrors] = useState<{
+    [key: string]: string;
+  }>({
+    name: "",
+    age: "",
+    education: "",
+    address: "",
+    walletAddress: "",
+    fees: "",
+    contact: "",
+  });
+
+  const validateForm = () => {
+    let valid = true;
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData.name) {
+      newErrors.name = "Name is required";
+      valid = false;
+    }
+
+    if (!formData.age || parseInt(formData.age) < 1) {
+      newErrors.age = "Please enter a Valid age";
+      valid = false;
+    }
+
+    if (!formData.fees || parseFloat(formData.fees) < 0) {
+      newErrors.fees = "Fees must be a non-negative number";
+      valid = false;
+    }
+
+    if (!formData.education) {
+      newErrors.education = "Education is required";
+      valid = false;
+    }
+
+    if (!formData.address) {
+      newErrors.address = "Address is required";
+      valid = false;
+    }
+
+    if (!formData.walletAddress) {
+      newErrors.walletAddress = "Wallet address is required";
+      valid = false;
+    }
+
+    if (!formData.contact) {
+      newErrors.contact = "Contact number is required";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    validateForm();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form Data:", formData);
+    if (validateForm()) {
+      // Handle form submission logic here
+      console.log("Form Data:", formData);
+    }
   };
 
   return (
@@ -56,9 +114,11 @@ export default function DoctorForm() {
                 value={formData[field]}
                 onChange={handleChange}
                 required
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                min={field === "age" || field === "fees" ? "0" : undefined}
+                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors[field] ? 'border-red-500' : ''}`}
               />
             )}
+            {errors[field] && <p className="text-red-500 text-xs italic">{errors[field]}</p>}
           </div>
         ))}
 
