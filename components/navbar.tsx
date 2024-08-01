@@ -123,10 +123,10 @@ const Navbar: React.FC = () => {
             
             <li>
               <a
-                href="/signin"
+                href="/registeruser"
                 className="block py-2 px-4 text-[#33272a] bg-[#ff8ba7] hover:bg-[#ff718c] rounded-md"
               >
-                Sign In
+                Register
               </a>
             </li>
           </ul>

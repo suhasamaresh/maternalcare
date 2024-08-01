@@ -8,36 +8,30 @@ import * as anchor from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import idl from "../../idl.json";
 
-const publickey = process.env.PROGRAMID;
-const PROGRAM_ID = new PublicKey(idl.metadata.address);
 
-export default function DoctorForm() {
+const PROGRAM_ID = new PublicKey(
+  idl.metadata.address // Replace with the address of the user registration program
+);
+
+export default function UserForm() {
   const [formData, setFormData] = useState<{
     [key: string]: string;
   }>({
-    name: "",
-    qualification: "",
+    firstname: "",
+    lastname: "",
+    age: "",
     image: "",
-    specialization: "",
-    description: "",
     address: "",
-    fee: "",
-    language: "",
-    doctor_email: "",
   });
 
   const [errors, setErrors] = useState<{
     [key: string]: string;
   }>({
-    name: "",
-    qualification: "",
+    firstname: "",
+    lastname: "",
+    age: "",
     image: "",
-    specialization: "",
-    description: "",
     address: "",
-    rating: "",
-    language: "",
-    doctor_email: "",
   });
 
   const anchorWallet = useAnchorWallet();
@@ -65,31 +59,32 @@ export default function DoctorForm() {
     validateForm();
   };
 
-  const registerDoctor = async (
+  const registerUser = async (
     program: anchor.Program,
     payerPublicKey: PublicKey,
-    formData: { [x: string]: string; name?: any; qualification?: any; image?: any; specialization?: any; description?: any; address?: any; rating?: any; language?: any; doctor_email?: any; }
+    formData: { [x: string]: string }
   ) => {
     try {
-      const [doctorPda] = anchor.web3.PublicKey.findProgramAddressSync(
-        [anchor.utils.bytes.utf8.encode("doctor"), payerPublicKey.toBuffer()],
+      // Find PDA
+      const [userPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [anchor.utils.bytes.utf8.encode("user"), payerPublicKey.toBuffer()],
         program.programId
       );
 
+      // Ensure age is an integer
+      const age = parseInt(formData.age, 10);
+
+      // Create the transaction
       const tx = await program.methods
-        .registerDoctor(
-          formData.name,
-          formData.qualification,
+        .registerUser(
+          formData.firstname,
+          formData.lastname,
+          age,
           formData.image,
-          formData.specialization,
-          formData.description,
-          formData.address,
-          parseInt(formData.rating),
-          formData.language,
-          formData.doctor_email
+          formData.address
         )
         .accounts({
-          doctorAccount: doctorPda,
+          userAccount: userPda,
           authority: payerPublicKey,
           systemProgram: SystemProgram.programId,
         })
@@ -97,7 +92,7 @@ export default function DoctorForm() {
 
       console.log("Transaction successful! Signature:", tx);
     } catch (error) {
-      console.error("Error registering doctor:", error);
+      console.error("Error registering user:", error);
     }
   };
 
@@ -123,17 +118,17 @@ export default function DoctorForm() {
         );
         console.log("Submitting transaction...");
 
-        await registerDoctor(program, publicKey, formData);
+        await registerUser(program, publicKey, formData);
 
-        console.log("Doctor registered successfully!");
+        console.log("User registered successfully!");
       } catch (error) {
-        console.error("Error registering doctor:", error);
+        console.error("Error registering user:", error);
         if (error instanceof WalletNotConnectedError) {
           console.log("Please connect your wallet first!");
         } else if ((error as Error).message.includes("Transaction simulation failed")) {
           console.log(`Transaction simulation failed. Error: ${(error as Error).message}`);
         } else {
-          console.log(`Error registering doctor: ${(error as Error).message}`);
+          console.log(`Error registering user: ${(error as Error).message}`);
         }
       }
     }
@@ -146,7 +141,7 @@ export default function DoctorForm() {
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-lg"
       >
         <h1 className="text-2xl font-bold text-center mb-6">
-          Doctor Registration Form
+          User Registration Form
         </h1>
 
         {Object.keys(formData).map((field) => (
@@ -158,13 +153,13 @@ export default function DoctorForm() {
               {field.charAt(0).toUpperCase() + field.slice(1)} *
             </label>
             <input
-              type={field === "rating" ? "number" : "text"}
+              type={field === "age" ? "number" : "text"}
               id={field}
               name={field}
               value={formData[field]}
               onChange={handleChange}
               required
-              min={field === "rating" ? "0" : undefined}
+              min={field === "age" ? "0" : undefined}
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                 errors[field] ? "border-red-500" : ""
               }`}
@@ -185,10 +180,6 @@ export default function DoctorForm() {
         </div>
 
         <div className="mt-4">
-          <p className="text-center text-yellow-500 text-sm">
-            Note: The default wallet address is the one you selected on the main page. 
-            If you wish to use a different wallet address, please use the button below to switch your wallet.
-          </p>
           {!connected ? (
             <p className="text-center text-red-500 text-sm">
               Please connect your wallet
@@ -199,6 +190,12 @@ export default function DoctorForm() {
             </p>
           )}
           <WalletMultiButton className="mt-2" />
+        </div>
+
+        <div className="mt-4">
+          <p className="text-center text-gray-500 text-sm">
+            Note: The wallet address connected on the main page will be used for transactions.
+          </p>
         </div>
       </form>
     </div>
