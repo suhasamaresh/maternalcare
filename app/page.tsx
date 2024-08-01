@@ -4,9 +4,9 @@ import Books from "@/components/books";
 import { motion } from "framer-motion";
 import FollowerPointerCard from "@/components/exercises";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { AnimatedBeamDemo } from "@/components/AnibeamCard";
 import MarqueeDemo from "@/components/Review";
 import Page from "@/components/faq";
+import { AnimatedBeamDemo } from "@/components/AnibeamCard";
 
 export default function Home() {
   return (
@@ -36,7 +36,7 @@ export default function Home() {
               Learn More
             </motion.button>
           </div>
-          <div className="md:w-3/4 flex flex-col items-center xl:pl-[290px]">
+          <div className="md:w-3/4 flex flex-col items-center xl:pl-[290px] bg-[#faeee7]">
             <AnimatedBeamDemo />
             <div className="flex flex-col items-center text-center py-5">
               <WalletMultiButton 
