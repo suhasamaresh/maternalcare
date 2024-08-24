@@ -8,8 +8,7 @@ import * as anchor from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import idl from "../../idl.json";
 
-const publickey = process.env.PROGRAMID;
-const PROGRAM_ID = new PublicKey(idl.metadata.address);
+const PROGRAM_ID = new PublicKey("F56z9E7gPrvD95Z2WTfSPrFuhdEyqcLoXcwpsvvck77P");
 
 export default function DoctorForm() {
   const [formData, setFormData] = useState<{
@@ -21,7 +20,7 @@ export default function DoctorForm() {
     specialization: "",
     description: "",
     address: "",
-    fee: "",
+    rating: "",
     language: "",
     doctor_email: "",
   });
@@ -68,14 +67,32 @@ export default function DoctorForm() {
   const registerDoctor = async (
     program: anchor.Program,
     payerPublicKey: PublicKey,
-    formData: { [x: string]: string; name?: any; qualification?: any; image?: any; specialization?: any; description?: any; address?: any; rating?: any; language?: any; doctor_email?: any; }
+    formData: { 
+      name: string;
+      qualification: string;
+      image: string;
+      specialization: string;
+      description: string;
+      address: string;
+      rating: string; // Note: It's a string here, but needs to be converted to u8
+      language: string;
+      doctor_email: string;
+    }
   ) => {
     try {
+      // Derive the doctor PDA
       const [doctorPda] = anchor.web3.PublicKey.findProgramAddressSync(
         [anchor.utils.bytes.utf8.encode("doctor"), payerPublicKey.toBuffer()],
         program.programId
       );
 
+      // Derive the registry PDA
+      const [registryPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [anchor.utils.bytes.utf8.encode("registry")],
+        program.programId
+      );
+
+      // Prepare the transaction
       const tx = await program.methods
         .registerDoctor(
           formData.name,
@@ -84,13 +101,14 @@ export default function DoctorForm() {
           formData.specialization,
           formData.description,
           formData.address,
-          parseInt(formData.rating),
+          parseInt(formData.rating), // Convert rating to u8
           formData.language,
           formData.doctor_email
         )
         .accounts({
           doctorAccount: doctorPda,
           authority: payerPublicKey,
+          registryAccount: registryPda,
           systemProgram: SystemProgram.programId,
         })
         .rpc();
@@ -122,8 +140,20 @@ export default function DoctorForm() {
           provider
         );
         console.log("Submitting transaction...");
+        console.log(program);
+        console.log(program.account.doctorState.all())
 
-        await registerDoctor(program, publicKey, formData);
+        await registerDoctor(program, publicKey, {
+          name: formData.name,
+          qualification: formData.qualification,
+          image: formData.image,
+          specialization: formData.specialization,
+          description: formData.description,
+          address: formData.address,
+          rating: formData.rating,
+          language: formData.language,
+          doctor_email: formData.doctor_email,
+        });
 
         console.log("Doctor registered successfully!");
       } catch (error) {

@@ -6,8 +6,9 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import idl from "../../idl.json";
-
 
 const PROGRAM_ID = new PublicKey(
   idl.metadata.address // Replace with the address of the user registration program
@@ -90,8 +91,10 @@ export default function UserForm() {
         })
         .rpc();
 
+      toast.success("User registered successfully!");
       console.log("Transaction successful! Signature:", tx);
     } catch (error) {
+      toast.error("Error registering user. Please try again.");
       console.error("Error registering user:", error);
     }
   };
@@ -99,7 +102,7 @@ export default function UserForm() {
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     if (!connected) {
-      console.error("Wallet not connected!");
+      toast.error("Wallet not connected!");
       return;
     }
     if (validateForm()) {
@@ -122,20 +125,21 @@ export default function UserForm() {
 
         console.log("User registered successfully!");
       } catch (error) {
-        console.error("Error registering user:", error);
         if (error instanceof WalletNotConnectedError) {
-          console.log("Please connect your wallet first!");
+          toast.error("Please connect your wallet first!");
         } else if ((error as Error).message.includes("Transaction simulation failed")) {
-          console.log(`Transaction simulation failed. Error: ${(error as Error).message}`);
+          toast.error(`Transaction simulation failed. Error: ${(error as Error).message}`);
         } else {
-          console.log(`Error registering user: ${(error as Error).message}`);
+          toast.error(`Error registering user: ${(error as Error).message}`);
         }
+        console.error("Error registering user:", error);
       }
     }
   };
 
   return (
     <div className="min-h-screen bg-[#faeee7] flex items-center justify-center p-5">
+      <ToastContainer />
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-lg"
@@ -178,6 +182,9 @@ export default function UserForm() {
             Submit
           </button>
         </div>
+        <p className="font-mono text-[#eed202] ">
+          NOTE: Do not use wallet addresses which are already registered. This will result in an error.
+        </p>
 
         <div className="mt-4">
           {!connected ? (

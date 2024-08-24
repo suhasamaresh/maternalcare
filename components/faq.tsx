@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     question: "Are transactions only done through solana?",
-    answer: "Yeah this application uses solana blockchain for transactions. So you need to have a solana wallet to make transactions.",
+    answer: "Yes, This application uses solana blockchain for transactions. So you need to have a solana wallet to make transactions.",
   },
 ];
 

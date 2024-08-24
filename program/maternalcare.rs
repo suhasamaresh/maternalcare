@@ -1,9 +1,7 @@
-//This program is just for refernce. This program has been wrote and deployed on the solana playground due to some installation issues. 
-
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{entrypoint::ProgramResult, system_instruction};
 
-declare_id!("PROGRAM_ID");
+declare_id!("EKhRfxbtNv4LgstBUAS2x29wshPVCNVeMUcwEBE9MMy");
 
 #[program]
 pub mod healthcare_sol {
@@ -18,14 +16,13 @@ pub mod healthcare_sol {
         address: String,
     ) -> ProgramResult {
         let user_account = &mut ctx.accounts.user_account;
-        let authority = &ctx.accounts.authority;
 
         user_account.first_name = first_name;
         user_account.last_name = last_name;
         user_account.age = age;
         user_account.image = image;
         user_account.address = address;
-        user_account.authority = authority.key();
+        user_account.authority = ctx.accounts.authority.key();
         Ok(())
     }
 
@@ -39,10 +36,9 @@ pub mod healthcare_sol {
         address: String,
         rating: u8,
         language: String,
-        doctor_email: String, // Added doctor_email
+        doctor_email: String,
     ) -> ProgramResult {
         let doctor_account = &mut ctx.accounts.doctor_account;
-        let authority = &ctx.accounts.authority;
 
         doctor_account.name = name;
         doctor_account.qualification = qualification;
@@ -50,23 +46,39 @@ pub mod healthcare_sol {
         doctor_account.specialization = specialization;
         doctor_account.description = description;
         doctor_account.address = address;
-        //we've used this rating as fees that is charged by the doctor as there was a confusion while writing this progam, apologies for inconvience!
         doctor_account.rating = rating;
         doctor_account.language = language;
-        doctor_account.doctor_email = doctor_email; // Set doctor_email
-        doctor_account.authority = authority.key();
+        doctor_account.doctor_email = doctor_email;
+        doctor_account.authority = ctx.accounts.authority.key();
+
+        // Add doctor account address to the global registry
+        let registry_account = &mut ctx.accounts.registry_account;
+        registry_account.doctor_addresses.push(doctor_account.key());
+
         Ok(())
     }
 
     pub fn transfer_fee(ctx: Context<TransferFee>, amount: u64) -> ProgramResult {
-        let from = &ctx.accounts.user_authority;
-        let to = &ctx.accounts.doctor_authority;
-
-        let ix = system_instruction::transfer(&from.key(), &to.key(), amount);
+        let ix = system_instruction::transfer(&ctx.accounts.user_authority.key(), &ctx.accounts.doctor_authority.key(), amount);
         solana_program::program::invoke(
             &ix,
-            &[from.to_account_info(), to.to_account_info()],
+            &[
+                ctx.accounts.user_authority.to_account_info(),
+                ctx.accounts.doctor_authority.to_account_info(),
+            ],
         )?;
+        Ok(())
+    }
+
+    pub fn initialize_registry(ctx: Context<InitializeRegistry>) -> ProgramResult {
+        let registry_account = &mut ctx.accounts.registry_account;
+        registry_account.doctor_addresses = Vec::new(); // Initialize with empty vector
+        Ok(())
+    }
+
+    pub fn get_doctor_registry(ctx: Context<GetDoctorRegistry>) -> ProgramResult {
+        let registry_account = &ctx.accounts.registry_account;
+        // Here you can implement logic to return the registry data if needed
         Ok(())
     }
 }
@@ -76,7 +88,7 @@ pub struct RegisterUser<'info> {
     #[account(
         init,
         payer = authority,
-        space = 8 + 32 + 32 + 1 + 256 + 256 + 32, // Example sizes for fields
+        space = 8 + 32 + 32 + 1 + 256 + 256 + 32, // Adjust space
         seeds = [b"user", authority.key().as_ref()],
         bump
     )]
@@ -91,7 +103,7 @@ pub struct RegisterDoctor<'info> {
     #[account(
         init,
         payer = authority,
-        space = 8 + 64 + 256 + 256 + 128 + 128 + 32 + 1 + 64 + 256 + 32, // Updated space for doctor_email
+        space = 8 + 64 + 256 + 256 + 128 + 128 + 32 + 1 + 64 + 256 + 32, // Adjust space
         seeds = [b"doctor", authority.key().as_ref()],
         bump
     )]
@@ -99,6 +111,12 @@ pub struct RegisterDoctor<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
     pub system_program: Program<'info, System>,
+    #[account(
+        mut,
+        seeds = [b"registry"],
+        bump
+    )]
+    pub registry_account: Account<'info, DoctorRegistry>,
 }
 
 #[derive(Accounts)]
@@ -108,6 +126,30 @@ pub struct TransferFee<'info> {
     #[account(mut)]
     pub doctor_authority: AccountInfo<'info>,
     pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct InitializeRegistry<'info> {
+    #[account(
+        init,
+        payer = authority,
+        space = 8 + 4 * 100, // Adjust space for doctor_addresses
+        seeds = [b"registry"],
+        bump
+    )]
+    pub registry_account: Account<'info, DoctorRegistry>,
+    #[account(mut)]
+    pub authority: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct GetDoctorRegistry<'info> {
+    #[account(
+        seeds = [b"registry"],
+        bump
+    )]
+    pub registry_account: Account<'info, DoctorRegistry>,
 }
 
 #[account]
@@ -130,6 +172,11 @@ pub struct DoctorState {
     pub address: String,
     pub rating: u8,
     pub language: String,
-    pub doctor_email: String, // Added doctor_email
+    pub doctor_email: String,
     pub authority: Pubkey,
+}
+
+#[account]
+pub struct DoctorRegistry {
+    pub doctor_addresses: Vec<Pubkey>,
 }

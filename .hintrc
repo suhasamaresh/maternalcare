@@ -6,7 +6,8 @@
     "axe/forms": [
       "default",
       {
-        "label": "off"
+        "label": "off",
+        "select-name": "off"
       }
     ],
     "axe/name-role-value": [
@@ -16,6 +17,7 @@
       }
     ],
     "no-inline-styles": "off",
-    "compat-api/css": "off"
+    "compat-api/css": "off",
+    "typescript-config/consistent-casing": "off"
   }
 }
