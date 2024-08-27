@@ -5,8 +5,9 @@ import Filter from "@/components/filter";
 import BlurFade from "@/components/magicui/blur-fade";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
-import idl from "../../idl.json";
+
 import * as anchor from "@project-serum/anchor";
+import idl from "./idl.json"; // Replace "./path/to/your/idl.json" with the actual path to your IDL file
 import { Wallet } from "@project-serum/anchor/dist/cjs/provider";
 
 // Your program ID

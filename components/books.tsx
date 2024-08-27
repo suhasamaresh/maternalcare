@@ -134,6 +134,7 @@ const StickyCardList = () => {
           text="Take a look at some of the recommended books for expectant mothers"
           duration={100}
         />
+        <Link href={"indivbook"}>
         {cardData.map((card, index) => {
           const targetScale = 1 - (cardData.length - index) * 0.05;
           const range = [index / cardData.length, 1];
@@ -151,9 +152,10 @@ const StickyCardList = () => {
             />
           );
         })}
+        </Link>
       </div>
       <div className="flex justify-center">
-        <Link href={"/books"}>
+        <Link href={"/bookpage"}>
           <motion.button
             className="bg-[#ff8ba7] text-[#33272a] py-2 px-6 rounded-lg text-lg font-semibold hover:bg-[#ff6b85] transition-colors"
             initial={{ scale: 0 }}

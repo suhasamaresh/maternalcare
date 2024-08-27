@@ -177,7 +177,7 @@ const FollowPointer = ({ x, y, title }: { x: MotionValue<number>, y: MotionValue
 const GradientButton = () => {
   return (
     <div className="flex justify-center">
-    <Link href={"/books"}>
+    <Link href={"/exercises"}>
       <motion.button
         className="bg-[#ff8ba7] text-[#33272a] py-2 px-6 rounded-lg text-lg font-semibold hover:bg-[#ff6b85] transition-colors"
         initial={{ scale: 0 }}
