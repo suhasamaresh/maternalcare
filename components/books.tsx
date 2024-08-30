@@ -14,40 +14,44 @@ interface CardData {
 
 const cardData: CardData[] = [
   {
-    title: "What to Expect When You're Expecting",
+    title: "My Pregnancy Jounel, Pregnancy Planner Set",
     content:
-      "This book offers practical advice and information on pregnancy, childbirth, and the first year of a baby's life. It covers a wide range of topics including physical changes, emotional wellbeing, and practical tips for expectant parents. The book is divided into easy-to-read sections that guide you through each stage of pregnancy, helping you understand what to expect and how to prepare for the arrival of your baby.",
-    bgColor: "#c3f0ca",
-    src: "https://covers.openlibrary.org/b/id/8779426-L.jpg",
+      "The road to motherhood is one of the most eventful journey a woman can take! Each moment, day, week, month brings forth a blend of emotions that are extraordinary with their ups and downs! This journal provides you the space to create a book full of precious and fun experiences, as well as stay on track for things through your pregnancy in a joyful, creative and engaging manner! A beautiful keepsake that can be looked back upon to cherish!",
+    bgColor:"#FDDFDF",
+    src: "https://m.media-amazon.com/images/I/61kD5hSGkzL._AC_UY218_.jpg",
   },
   {
-    title: "The Womanly Art of Breastfeeding",
+    title: "Little Miracle: 40 Weeks Pregnancy Journal",
     content:
-      "An essential guide for breastfeeding mothers, providing comprehensive information and support. This book covers everything from the basics of breastfeeding to dealing with common challenges and ensuring that both mother and baby are healthy and happy. It is a valuable resource for new mothers, offering practical advice and encouraging words from experienced breastfeeding advocates.",
-    bgColor: "#FEF8DD",
-    src: "https://covers.openlibrary.org/b/id/8226195-L.jpg",
+      "Introducing the Little Miracle Pregnancy Journal, your ultimate companion to document and cherish every incredible moment of your pregnancy journey. From the first fluttering kicks to the anticipation of holding your little one in your arms, this journal is designed to capture every milestone, memory, and emotion along the way.",
+    bgColor: "#F0DEFD",
+    src: "https://m.media-amazon.com/images/I/71edoVR5DgL._SY425_.jpg",
   },
   {
-    title: "Ina May's Guide to Childbirth",
+    title: "Belly to Baby, A Pregnancy Memory Book",
     content:
-      "A natural approach to childbirth, emphasizing the power and strength of women’s bodies. This book offers inspirational birth stories and practical advice on how to have a more comfortable and empowering birth experience. Ina May Gaskin shares her wisdom and knowledge gained from years of experience as a midwife, helping women to trust their bodies and make informed choices about their childbirth experience.",
-    bgColor: "#ACDDDE",
-    src: "https://covers.openlibrary.org/b/id/10682317-L.jpg",
+      "BELLY TO BABY: A Pregnancy Memory Book is the perfect way to document the precious memories of your pregnancy journey. We have created this modern and beautiful pregnancy memory book to record all the important photos. You will enjoy logging precious moments with notes and pictures in our special memory book. PAGES INCLUDE:Early pregnancy experience, Visits to doctors, Ultrasound photos,Baby bump journey month 1 to 9, Baby shower, Photo shoot, Delivery preparation, Baby prediction,Labor experience",
+    bgColor: "#DEF3FD",
+    src: "https://images-eu.ssl-images-amazon.com/images/I/71KM8qTSbUL._AC_UL165_SR165,165_.jpg",
   },
+  
   {
-    title: "The Birth Partner",
+    title: "Bump to Baby Pregnancy Memory Record Book",
     content:
-      "A complete guide for partners, doulas, and other labor companions. This book provides detailed information on how to support a birthing person through labor and delivery. It includes practical tips, emotional support strategies, and step-by-step guidance on what to expect during each stage of labor. It is an invaluable resource for anyone who will be supporting a birthing person, helping them to provide the best possible care and support.",
-    bgColor: "#FFE7C7",
-    src: "https://covers.openlibrary.org/b/id/8261844-L.jpg",
+      "Document every significant milestone and event throughout your entire 9-month journey with our 'Bump to Baby' keepsake Pregnancy journal. The journal features beautifully designed, cute, and vibrant pages, including sections such as First Ultrasound, Name Tracker, Baby Shower, Preparing Your Nursery, Hospital Bag Checklist, Letter to My Baby, Baby's Biodata, Trackers, Monthly Reflections, Pregnancy Facts, and helpful tips.",
+    bgColor: "#DEFDE0",
+    src: "https://m.media-amazon.com/images/I/71FeAaBx6qL._SY425_.jpg",
   },
+  
   {
-    title: "HypnoBirthing: The Mongan Method",
+    title: "The Shadow Work Journal",
     content:
-      "An approach to childbirth that emphasizes relaxation and self-hypnosis. This book teaches techniques for a more calm and comfortable birth, helping mothers to manage pain and reduce stress. It includes practical exercises, guided imagery, and positive affirmations that can be used during pregnancy and labor. The Mongan Method aims to help women have a more positive and empowering birth experience by tapping into the power of their mind and body.",
-    bgColor: "#8ED6C5",
-    src: "https://covers.openlibrary.org/b/id/8281998-L.jpg",
+      "From the childbirth experts at the Mayo Clinic comes the newly revised guide on planning for a healthy pregnancy. With detailed information about fertility, prenatal care, common pregnancy symptoms, and childbirth, this comprehensive guide will be your go-to source for answering all your ordinary—and not so ordinary—pregnancy questions. Finally, this collective effort from the obstetrics and gynecology experts at the Mayo Clinic covers new information about the latest technologies in prenatal care and childbirth, as well as details the benefits and risks involved with growing trends in childbirth, including topics like home births, placentophagy, and vaginal seeding. ",
+    bgColor: "#FCF7DE",
+    src: "https://m.media-amazon.com/images/I/712Af-xENML._AC_UY218_.jpg",
   },
+ 
+  
 ];
 
 const StickyCard = ({
