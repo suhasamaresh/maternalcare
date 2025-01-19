@@ -8,7 +8,7 @@ import * as anchor from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import idl from "../../idl.json";
+import idl from "@/idl.json";
 
 const PROGRAM_ID = new PublicKey(
   idl.metadata.address // Replace with the address of the user registration program
