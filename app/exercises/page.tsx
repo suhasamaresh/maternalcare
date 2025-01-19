@@ -3,8 +3,8 @@ import React from 'react';
 import BlurFade from "@/components/magicui/blur-fade";
 import LetterPullup from "@/components/magicui/letter-pullup";
 import SparklesText from "@/components/magicui/sparkles-text";
-import { useInView } from 'react-intersection-observer';
 import GradualSpacing from "@/components/magicui/gradual-spacing";
+import { useInView } from 'react-intersection-observer';
 
 interface SectionProps {
   imageSrc: string;
