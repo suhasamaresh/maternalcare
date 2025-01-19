@@ -6,7 +6,6 @@ declare_id!("EKhRfxbtNv4LgstBUAS2x29wshPVCNVeMUcwEBE9MMy");
 #[program]
 pub mod healthcare_sol {
     use super::*;
-
     pub fn register_user(
         ctx: Context<RegisterUser>,
         first_name: String,

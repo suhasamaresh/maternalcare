@@ -8,7 +8,7 @@ import * as anchor from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import idl from "../../idl.json";
 
-const PROGRAM_ID = new PublicKey("F56z9E7gPrvD95Z2WTfSPrFuhdEyqcLoXcwpsvvck77P");
+const PROGRAM_ID = new PublicKey(idl.metadata.address);
 
 export default function DoctorForm() {
   const [formData, setFormData] = useState<{

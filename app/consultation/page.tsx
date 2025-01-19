@@ -12,7 +12,7 @@ import { Wallet } from "@project-serum/anchor/dist/cjs/provider";
 // Your program ID
 const PROGRAM_ID = new PublicKey(idl.metadata.address);
 
-// Define the Doctor class and schema for Borsh deserialization
+// Define the Doctor class
 class Doctor {
   name: string;
   qualification: string;
@@ -23,19 +23,20 @@ class Doctor {
   rating: number;
   language: string;
   doctor_email: string;
-  experience: string; // Add the 'experience' property
-  gender: any;
-  constructor(fields: { name: string; qualification: string; image: string; specialization: string; description: string; address: string; rating: number; language: string; doctor_email: string; experience: string; }) {
-    this.name = fields.name;
-    this.qualification = fields.qualification;
-    this.image = fields.image;
-    this.specialization = fields.specialization;
-    this.description = fields.description;
-    this.address = fields.address;
-    this.rating = fields.rating;
-    this.language = fields.language;
-    this.doctor_email = fields.doctor_email;
-    this.experience = fields.experience; // Assign the 'experience' property
+  experience: string;
+  gender: string; // assuming gender is a string
+  constructor(fields: any) {
+    this.name = fields.name || "";
+    this.qualification = fields.qualification || "";
+    this.image = fields.image || "";
+    this.specialization = fields.specialization || "";
+    this.description = fields.description || "";
+    this.address = fields.address || "";
+    this.rating = fields.rating || 0;
+    this.language = fields.language || "";
+    this.doctor_email = fields.doctor_email || "";
+    this.experience = fields.experience || "";
+    this.gender = fields.gender || "";
   }
 }
 
@@ -49,15 +50,9 @@ const fetchDoctors = async (connection: anchor.web3.Connection, anchorWallet: Wa
     const program = new anchor.Program(idl as anchor.Idl, PROGRAM_ID, provider);
 
     const accounts = await program.account.doctorState.all();
+    console.log("Doctors fetched:", accounts); // Check if doctors are fetched
 
-    const doctors = accounts.map((account) => {
-      const doctor = new Doctor(account.account.data);
-      return {
-        pubkey: account.publicKey.toBase58(),
-        ...doctor,
-      };
-    });
-
+    const doctors = accounts.map((account) => new Doctor(account.account));
     return doctors;
   } catch (error) {
     console.error("Error fetching doctors:", error);
@@ -66,7 +61,7 @@ const fetchDoctors = async (connection: anchor.web3.Connection, anchorWallet: Wa
 };
 
 const BentoDemo = () => {
-  const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
   const { connection } = useConnection();
   const anchorWallet = useAnchorWallet();
 
@@ -74,7 +69,7 @@ const BentoDemo = () => {
     const getDoctors = async () => {
       if (anchorWallet) {
         const fetchedDoctors = await fetchDoctors(connection, anchorWallet);
-        setFilteredDoctors(fetchedDoctors);
+        setDoctors(fetchedDoctors); // Set the fetched doctors to state
       }
     };
 
@@ -82,15 +77,7 @@ const BentoDemo = () => {
   }, [anchorWallet, connection]);
 
   const handleApplyFilters = (filters: any) => {
-    const filtered = filteredDoctors.filter((doctor) => {
-      return (
-        (filters.gender ? doctor.gender === filters.gender : true) &&
-        (filters.experience ? parseInt(doctor.experience) >= parseInt(filters.experience) : true) &&
-        (filters.location ? doctor.specialization.toLowerCase().includes(filters.location.toLowerCase()) : true) &&
-        (filters.fee ? parseInt("500") <= parseInt(filters.fee) : true)
-      );
-    });
-    setFilteredDoctors(filtered);
+    // Handle filtering logic (if necessary) here
   };
 
   return (
@@ -123,29 +110,34 @@ const BentoDemo = () => {
         </BlurFade>
         <div className="items-center mt-[50px]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredDoctors.map((doctor, index) => (
-              <div
-                key={index}
-                className="relative col-span-2 lg:col-span-1 bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105"
-              >
-                <img
-                  src={doctor.image}
-                  alt={doctor.name}
-                  className="w-full h-48 "
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-bold">{doctor.name}</h3>
-                  <p className="text-sm text-gray-600">{doctor.specialization}</p>
-                  <p className="text-sm text-gray-600">{doctor.qualification}</p>
-                  <p className="text-sm text-gray-600">{doctor.address}</p>
-                  <p className="text-sm text-gray-600">{doctor.language}</p>
-                  <p className="text-sm text-gray-600">{doctor.doctor_email}</p>
+            {doctors.length > 0 ? (
+              doctors.map((doctor, index) => (
+                <div
+                  key={index}
+                  className="relative col-span-2 lg:col-span-1 bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105"
+                >
+                  <img
+                    src={doctor.image}
+                    alt={doctor.name}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-bold">{doctor.name}</h3>
+                    <p className="text-sm text-gray-600">{doctor.specialization}</p>
+                    <p className="text-sm text-gray-600">{doctor.qualification}</p>
+                    <p className="text-sm text-gray-600">{doctor.address}</p>
+                    <p className="text-sm text-gray-600">{doctor.language}</p>
+                    <p className="text-sm text-gray-600">{doctor.doctor_email}</p>
+                    <p className="text-sm text-gray-600">Experience: {doctor.experience} years</p>
+                  </div>
+                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                    <p className="text-white text-lg">Learn more &rarr;</p>
+                  </div>
                 </div>
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <p className="text-white text-lg">Learn more &rarr;</p>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-gray-600 col-span-full">No doctors found.</p>
+            )}
           </div>
         </div>
         <div className="pb-[30px]"></div>
