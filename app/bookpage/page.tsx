@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from 'react';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import './HomePage.css'; // Import the CSS file for animations
 import FlipText from "@/components/magicui/flip-text";
 import { FadeText } from "@/components/magicui/fade-text";
