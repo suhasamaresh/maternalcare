@@ -12,7 +12,7 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
-import idl from "@/idl.json";
+import idl from "../../idl.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

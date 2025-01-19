@@ -6,7 +6,8 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
-import idl from "@/idl.json";
+import idl from "../../idl.json";
+
 
 const PROGRAM_ID = new PublicKey(idl.metadata.address);
 
