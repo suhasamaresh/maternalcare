@@ -1,0 +1,112 @@
+{
+  "version": "0.1.0",
+  "name": "healthcare_sol",
+  "instructions": [
+    {
+      "name": "registerUser",
+      "accounts": [
+        { "name": "userAccount", "isMut": true, "isSigner": false },
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "firstName", "type": "string" },
+        { "name": "lastName", "type": "string" },
+        { "name": "age", "type": "u8" },
+        { "name": "image", "type": "string" },
+        { "name": "address", "type": "string" }
+      ]
+    },
+    {
+      "name": "registerDoctor",
+      "accounts": [
+        { "name": "doctorAccount", "isMut": true, "isSigner": false },
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false },
+        { "name": "registryAccount", "isMut": true, "isSigner": false }
+      ],
+      "args": [
+        { "name": "name", "type": "string" },
+        { "name": "qualification", "type": "string" },
+        { "name": "image", "type": "string" },
+        { "name": "specialization", "type": "string" },
+        { "name": "description", "type": "string" },
+        { "name": "address", "type": "string" },
+        { "name": "rating", "type": "u8" },
+        { "name": "language", "type": "string" },
+        { "name": "doctorEmail", "type": "string" }
+      ]
+    },
+    {
+      "name": "transferFee",
+      "accounts": [
+        { "name": "userAuthority", "isMut": true, "isSigner": true },
+        { "name": "doctorAuthority", "isMut": true, "isSigner": false },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [{ "name": "amount", "type": "u64" }]
+    },
+    {
+      "name": "initializeRegistry",
+      "accounts": [
+        { "name": "registryAccount", "isMut": true, "isSigner": false },
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": []
+    },
+    {
+      "name": "getDoctorRegistry",
+      "accounts": [
+        { "name": "registryAccount", "isMut": false, "isSigner": false }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "UserState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "firstName", "type": "string" },
+          { "name": "lastName", "type": "string" },
+          { "name": "age", "type": "u8" },
+          { "name": "image", "type": "string" },
+          { "name": "address", "type": "string" },
+          { "name": "authority", "type": "publicKey" }
+        ]
+      }
+    },
+    {
+      "name": "DoctorState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "name", "type": "string" },
+          { "name": "qualification", "type": "string" },
+          { "name": "image", "type": "string" },
+          { "name": "specialization", "type": "string" },
+          { "name": "description", "type": "string" },
+          { "name": "address", "type": "string" },
+          { "name": "rating", "type": "u8" },
+          { "name": "language", "type": "string" },
+          { "name": "doctorEmail", "type": "string" },
+          { "name": "authority", "type": "publicKey" }
+        ]
+      }
+    },
+    {
+      "name": "DoctorRegistry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "doctorAddresses", "type": { "vec": "publicKey" } }
+        ]
+      }
+    }
+  ],
+  "metadata":{
+    "address": "AREWxPLrY8AxZ3c8Xi8xzqmtCPb7RHZLFTfMgytykUQT"
+  }
+}
